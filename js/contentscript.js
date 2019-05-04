@@ -14,15 +14,15 @@ function init() {
             || pathName.startsWith('/setup/build/viewApexTrigger.apexp'))) {
 
 
-        if ((pathName.startsWith('/066') && pathName.length>16) || pathName.startsWith('/apexpages/setup/viewApexPage.apexp')) {
+        if ((pathName.startsWith('/066') && pathName.length>15) || pathName.startsWith('/apexpages/setup/viewApexPage.apexp')) {
             // VF Page
             elementId = document.querySelector("[id*='codePanel']").id;
             validPage = true;
-        } else if ((pathName.startsWith('/01p') && pathName.length>16) || pathName.startsWith('/setup/build/viewApexClass.apexp')) {
+        } else if ((pathName.startsWith('/01p') && pathName.length>15) || pathName.startsWith('/setup/build/viewApexClass.apexp')) {
             // Apex Class
             elementId = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
             validPage = true;
-        } else if ((pathName.startsWith('/01q') && pathName.length>16) || pathName.startsWith('/setup/build/viewApexTrigger.apexp')) {
+        } else if ((pathName.startsWith('/01q') && pathName.length>15) || pathName.startsWith('/setup/build/viewApexTrigger.apexp')) {
             // Apex Trigger
             elementId = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
             validPage = true;
