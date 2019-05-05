@@ -1,6 +1,6 @@
 {
     "name": "Copy Salesforce Code",
-    "version": "1.0",
+    "version": "1.0.1",
     "manifest_version": 2,
     "description": "Copy Salesforce code easily with Copy button. Productivity tool for Salesforce Developers.",
     "author": "Hemendra Singh Rajawat",
@@ -24,5 +24,7 @@
      "js": ["js/contentscript.js",
             "js/jquery-3.4.1.min.js"],
      "matches": [ "https://*.salesforce.com/*"]
-    }]
+    }],
+
+    "update_url": "http://clients2.google.com/service/update2/crx?response=updatecheck&x=id%3Dnmbfpjnjhckcffgpcdahlebepedkoaib%26uc"
 }
