@@ -40,37 +40,50 @@ function init() {
             validPage = true;
         }
 
+        // If the page is valid for copy button add the Copy button and Event Script.
         if (validPage) {
-            var scriptCode = 'function copyToClipboard(){var tempInput=document.createElement("textarea"); '
-                             + 'var text = document.getElementById(\''+ elementId + '\').innerText; '
-                             + 'tempInput.value = text.replace(\/ \/g, " "); '
-                             + 'document.body.appendChild(tempInput); tempInput.select(); '
-                             + 'document.execCommand("copy");tempInput.remove();alert("Code Copied!")}';
-
-            var script = document.createElement("script");
-            var inlineScript = document.createTextNode(scriptCode);
-            script.appendChild(inlineScript);
-            document.head.appendChild(script);
-
+            // Create top button
             var copyButtonTop = document.createElement('input');
             copyButtonTop.setAttribute('id', 'CopyButton');
             copyButtonTop.setAttribute('class', 'btn');
             copyButtonTop.setAttribute('type', 'button');
             copyButtonTop.setAttribute('value', 'Copy');
-            copyButtonTop.setAttribute('onClick', 'copyToClipboard();');
 
+            // Create bottom button
             var copyButtonBottom = document.createElement('input');
             copyButtonBottom.setAttribute('id', 'CopyButton');
             copyButtonBottom.setAttribute('class', 'btn');
             copyButtonBottom.setAttribute('type', 'button');
             copyButtonBottom.setAttribute('value', 'Copy');
-            copyButtonBottom.setAttribute('onClick', 'copyToClipboard();');
 
+            // Add top button to page
             var topButtonsTD = document.querySelector("[class*='pbButton']");
             topButtonsTD.insertBefore(copyButtonTop, topButtonsTD.childNodes[0]);
 
+            // Add bottom button to page
             var bottomButtonsTD = document.querySelector("[class*='pbButtonb']");
             bottomButtonsTD.insertBefore(copyButtonBottom, bottomButtonsTD.childNodes[0]);
+
+            // Event listener for top button
+            copyButtonTop.addEventListener("click", function() {
+                copyToClipboard(elementId);
+            });
+
+            // Event listener for bottom button
+            copyButtonBottom.addEventListener("click", function() {
+                copyToClipboard(elementId);
+            });
         }
     }
+}
+
+function copyToClipboard(elementId) {
+    var tempInput=document.createElement("textarea"); 
+    var text = document.getElementById(elementId).innerText; 
+    tempInput.value = text.replace(/ /g, " "); 
+    document.body.appendChild(tempInput); 
+    tempInput.select(); 
+    document.execCommand("copy");
+    tempInput.remove();
+    alert("Code Copied!")
 }
