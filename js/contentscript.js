@@ -4,82 +4,111 @@ function init() {
     var url = new URL(window.location.href);
     var pathName = url.pathname;
     var validPage = false;
-    var elementId = '';
+    var elementKey = '';
+    var keyType = 'id';
+    var buttonPos = 'both';
 
     // Check if the current page is for 'Apex Class', 'Apex Trigger' or 'Visualforce Page'
     if (pathName != null && pathName != '' 
-        && (pathName.startsWith('/066') || pathName.startsWith('/01p') || pathName.startsWith('/01q') 
+        && (pathName.startsWith('/066') || pathName.startsWith('/01p') || pathName.startsWith('/01q')
+            || pathName.startsWith('/099') || pathName.startsWith('/00N') 
             || pathName.startsWith('/apexpages/setup/viewApexPage.apexp')
             || pathName.startsWith('/setup/build/viewApexClass.apexp') 
-            || pathName.startsWith('/setup/build/viewApexTrigger.apexp'))) {
-
+            || pathName.startsWith('/setup/build/viewApexTrigger.apexp') 
+            || pathName.startsWith('/apexpages/setup/viewApexComponent.apexp'))) {
 
         if (!pathName.includes('/e') 
             && ((pathName.startsWith('/066') && pathName.length>15) 
                 || pathName.startsWith('/apexpages/setup/viewApexPage.apexp'))
             && document.querySelector("[id*='codePanel']") != null) {
 
-            // VF Page
-            elementId = document.querySelector("[id*='codePanel']").id;
+            // VF Page View Mode
+            elementKey = document.querySelector("[id*='codePanel']").id;
+            validPage = true;
+        } else if (!pathName.includes('/e') 
+            && ((pathName.startsWith('/099') && pathName.length>15) 
+                || pathName.startsWith('/apexpages/setup/viewApexComponent.apexp'))
+            && document.querySelector("[id*='codePanel']") != null) {
+
+            // VF Component View Mode
+            elementKey = document.querySelector("[id*='codePanel']").id;
             validPage = true;
         } else if (!pathName.includes('/e') 
             && ((pathName.startsWith('/01p') && pathName.length>15) 
                 || pathName.startsWith('/setup/build/viewApexClass.apexp'))
-            && document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1]!= null) {
+            && document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1] != null) {
 
-            // Apex Class
-            elementId = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
+            // Apex Class View Mode
+            elementKey = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
             validPage = true;
         } else if (!pathName.includes('/e') 
             && ((pathName.startsWith('/01q') && pathName.length>15) 
                 || pathName.startsWith('/setup/build/viewApexTrigger.apexp'))
             && document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1] != null) {
 
-            // Apex Trigger
-            elementId = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
+            // Apex Trigger View Mode
+            elementKey = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
             validPage = true;
+        } else if (!pathName.includes('/e') 
+            && (pathName.startsWith('/00N') && pathName.length>15) 
+            && document.querySelector("[class*='last detailRow']") != null) {
+
+            // Formula Field View Mode
+            elementKey = 'last detailRow';
+            keyType = 'class';
+            validPage = true;
+            buttonPos = 'top';
         }
 
         // If the page is valid for copy button add the Copy button and Event Script.
         if (validPage) {
-            // Create top button
-            var copyButtonTop = document.createElement('input');
-            copyButtonTop.setAttribute('id', 'CopyButton');
-            copyButtonTop.setAttribute('class', 'btn');
-            copyButtonTop.setAttribute('type', 'button');
-            copyButtonTop.setAttribute('value', 'Copy');
+            
+            if (buttonPos =='both' || buttonPos == 'top') {
+                // Create top button
+                var copyButtonTop = document.createElement('input');
+                copyButtonTop.setAttribute('id', 'CopyButton');
+                copyButtonTop.setAttribute('class', 'btn');
+                copyButtonTop.setAttribute('type', 'button');
+                copyButtonTop.setAttribute('value', 'Copy');
 
-            // Create bottom button
-            var copyButtonBottom = document.createElement('input');
-            copyButtonBottom.setAttribute('id', 'CopyButton');
-            copyButtonBottom.setAttribute('class', 'btn');
-            copyButtonBottom.setAttribute('type', 'button');
-            copyButtonBottom.setAttribute('value', 'Copy');
+                // Add top button to page
+                var topButtonsTD = document.querySelector("[class*='pbButton']");
+                topButtonsTD.insertBefore(copyButtonTop, topButtonsTD.childNodes[0]);
 
-            // Add top button to page
-            var topButtonsTD = document.querySelector("[class*='pbButton']");
-            topButtonsTD.insertBefore(copyButtonTop, topButtonsTD.childNodes[0]);
+                // Event listener for top button
+                copyButtonTop.addEventListener("click", function() {
+                    copyToClipboard(elementKey, keyType);
+                });
+            }
 
-            // Add bottom button to page
-            var bottomButtonsTD = document.querySelector("[class*='pbButtonb']");
-            bottomButtonsTD.insertBefore(copyButtonBottom, bottomButtonsTD.childNodes[0]);
+            if (buttonPos =='both' || buttonPos == 'bottom') {
+                // Create bottom button
+                var copyButtonBottom = document.createElement('input');
+                copyButtonBottom.setAttribute('id', 'CopyButton');
+                copyButtonBottom.setAttribute('class', 'btn');
+                copyButtonBottom.setAttribute('type', 'button');
+                copyButtonBottom.setAttribute('value', 'Copy');
 
-            // Event listener for top button
-            copyButtonTop.addEventListener("click", function() {
-                copyToClipboard(elementId);
-            });
+                // Add bottom button to page
+                var bottomButtonsTD = document.querySelector("[class*='pbButtonb']");
+                bottomButtonsTD.insertBefore(copyButtonBottom, bottomButtonsTD.childNodes[0]);
 
-            // Event listener for bottom button
-            copyButtonBottom.addEventListener("click", function() {
-                copyToClipboard(elementId);
-            });
+                // Event listener for bottom button
+                copyButtonBottom.addEventListener("click", function() {
+                    copyToClipboard(elementKey, keyType);
+                });
+            }
         }
     }
 }
 
-function copyToClipboard(elementId) {
+function copyToClipboard(elementKey, keyType) {
     var tempInput=document.createElement("textarea"); 
-    var text = document.getElementById(elementId).innerText; 
+    if (keyType == 'id') {
+        var text = document.getElementById(elementKey).innerText.trim();
+    } else if (keyType == 'class') {
+        var text = document.querySelector("[class*= '" + elementKey + "']").innerText.trim();
+    }
     tempInput.value = text.replace(/ /g, " "); 
     document.body.appendChild(tempInput); 
     tempInput.select(); 

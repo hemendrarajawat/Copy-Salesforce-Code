@@ -1,6 +1,6 @@
 {
     "name": "Copy Salesforce Code",
-    "version": "2.0.0",
+    "version": "2.1.1",
     "manifest_version": 2,
     "description": "Copy Salesforce code easily with Copy button. Productivity tool for Salesforce Developers.",
     "author": "Hemendra Singh Rajawat",
@@ -12,11 +12,11 @@
       "64": "img/icons/Icon-64.png",
       "128": "img/icons/Icon-128.png"
     },
-	
-	"browser_action": {
-		"default_icon": "img/CopySalesforceCode.png",
-		"default_popup": "pages/popup.html"
-	},
+    
+    "browser_action": {
+        "default_icon": "img/CopySalesforceCode.png",
+        "default_popup": "pages/popup.html"
+    },
     
     "permissions": [ "tabs", "https://*.salesforce.com/*"],
     
