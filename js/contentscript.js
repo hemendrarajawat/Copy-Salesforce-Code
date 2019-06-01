@@ -9,7 +9,10 @@ function init() {
     var buttonPos = 'both';
     var elementType = '';
 
-    // Check if the current page is for 'Apex Class', 'Apex Trigger' or 'Visualforce Page'
+    /*
+     * Check if the current page is for 'Apex Class', 'Apex Trigger', 'Visualforce Page' 
+     * or 'Formula Field'.
+     */
     if (pathName != null && pathName != '' 
         && (pathName.startsWith('/066') || pathName.startsWith('/01p') || pathName.startsWith('/01q')
             || pathName.startsWith('/099') || pathName.startsWith('/00N') 
@@ -114,6 +117,9 @@ function init() {
     }
 }
 
+/**
+ * This method runs when the 'Copy' button is clicked and copy the code.
+ */
 function copyToClipboard(elementKey, keyType, elementType) {
     if (elementType == 'textarea') {
         var iframe = document.querySelector("[name*='codeeditor:buffer']");
