@@ -7,6 +7,7 @@ function init() {
     var elementKey = '';
     var keyType = 'id';
     var buttonPos = 'both';
+    var elementType = '';
 
     // Check if the current page is for 'Apex Class', 'Apex Trigger' or 'Visualforce Page'
     if (pathName != null && pathName != '' 
@@ -33,14 +34,25 @@ function init() {
             // VF Component View Mode
             elementKey = document.querySelector("[id*='codePanel']").id;
             validPage = true;
-        } else if (!pathName.includes('/e') 
-            && ((pathName.startsWith('/01p') && pathName.length>15) 
-                || pathName.startsWith('/setup/build/viewApexClass.apexp'))
-            && document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1] != null) {
+        } else if ((pathName.startsWith('/01p') && pathName.length>15) 
+            || pathName.startsWith('/setup/build/viewApexClass.apexp') 
+            || pathName.startsWith('/setup/build/editApexClass.apexp')) {
 
-            // Apex Class View Mode
-            elementKey = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
-            validPage = true;
+            // Apex Class Page
+            
+            if (!pathName.includes('/e') && document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1] != null) {
+                
+                // Apex Class View Page
+                elementKey = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
+                validPage = true;
+            } else if (pathName.includes('/e') || pathName.startsWith('/setup/build/editApexClass.apexp')) {
+
+                // Apex Class Edit Page
+                elementKey = 'textarea';
+                elementType = 'textarea';
+                validPage = true;
+                buttonPos = 'top';
+            }
         } else if (!pathName.includes('/e') 
             && ((pathName.startsWith('/01q') && pathName.length>15) 
                 || pathName.startsWith('/setup/build/viewApexTrigger.apexp'))
@@ -66,7 +78,7 @@ function init() {
             if (buttonPos =='both' || buttonPos == 'top') {
                 // Create top button
                 var copyButtonTop = document.createElement('input');
-                copyButtonTop.setAttribute('id', 'CopyButton');
+                copyButtonTop.setAttribute('id', 'CopyButtonTop');
                 copyButtonTop.setAttribute('class', 'btn');
                 copyButtonTop.setAttribute('type', 'button');
                 copyButtonTop.setAttribute('value', 'Copy');
@@ -77,14 +89,14 @@ function init() {
 
                 // Event listener for top button
                 copyButtonTop.addEventListener("click", function() {
-                    copyToClipboard(elementKey, keyType);
+                    copyToClipboard(elementKey, keyType, elementType);
                 });
             }
 
             if (buttonPos =='both' || buttonPos == 'bottom') {
                 // Create bottom button
                 var copyButtonBottom = document.createElement('input');
-                copyButtonBottom.setAttribute('id', 'CopyButton');
+                copyButtonBottom.setAttribute('id', 'CopyButtonBottom');
                 copyButtonBottom.setAttribute('class', 'btn');
                 copyButtonBottom.setAttribute('type', 'button');
                 copyButtonBottom.setAttribute('value', 'Copy');
@@ -95,24 +107,34 @@ function init() {
 
                 // Event listener for bottom button
                 copyButtonBottom.addEventListener("click", function() {
-                    copyToClipboard(elementKey, keyType);
+                    copyToClipboard(elementKey, keyType, elementType);
                 });
             }
         }
     }
 }
 
-function copyToClipboard(elementKey, keyType) {
-    var tempInput=document.createElement("textarea"); 
-    if (keyType == 'id') {
-        var text = document.getElementById(elementKey).innerText.trim();
-    } else if (keyType == 'class') {
-        var text = document.querySelector("[class*= '" + elementKey + "']").innerText.trim();
+function copyToClipboard(elementKey, keyType, elementType) {
+    if (elementType == 'textarea') {
+        var iframe = document.querySelector("[name*='codeeditor:buffer']");
+        var tempInput = iframe.contentWindow.document.getElementById(elementKey);
+
+        tempInput.select();
+        iframe.contentWindow.document.execCommand("copy");
+        alert("Code Copied!");
+    } else {
+        var tempInput = document.createElement("textarea"); 
+        if (keyType == 'id') {
+            var text = document.getElementById(elementKey).innerText.trim();
+        } else if (keyType == 'class') {
+            var text = document.querySelector("[class*= '" + elementKey + "']").innerText.trim();
+        }
+        tempInput.value = text.replace(/ /g, " "); 
+        document.body.appendChild(tempInput);
+
+        tempInput.select(); 
+        document.execCommand("copy");
+        tempInput.remove();
+        alert("Code Copied!");
     }
-    tempInput.value = text.replace(/ /g, " "); 
-    document.body.appendChild(tempInput); 
-    tempInput.select(); 
-    document.execCommand("copy");
-    tempInput.remove();
-    alert("Code Copied!")
 }
