@@ -115,6 +115,15 @@ function init() {
             }
         }
     }
+
+    /*
+     * Update the link for Developer Console to open in new tab.
+     */
+    var developerConsoleLink = document.querySelector("a[class*='debugLogLink']");
+    if (developerConsoleLink != null) {
+        developerConsoleLink.href = '/_ui/common/apex/debug/ApexCSIPage';
+        developerConsoleLink.target = '_blank';
+    }
 }
 
 /**
