@@ -86,13 +86,23 @@ function init() {
                 copyButtonTop.setAttribute('type', 'button');
                 copyButtonTop.setAttribute('value', 'Copy');
 
+                // Create Inner Button Div
+                var innerButtonDiv = document.createElement('div');
+                innerButtonDiv.setAttribute('class', 'innerButtonDiv');
+                innerButtonDiv.append(copyButtonTop);
+
+                // Create Outer Button Div
+                var outerTopButtonDiv = document.createElement('div');
+                outerTopButtonDiv.setAttribute('class', 'outerTopButtonDiv');
+                outerTopButtonDiv.append(innerButtonDiv);
+
                 // Add top button to page
                 var topButtonsTD = document.querySelector("[class*='pbButton']");
-                topButtonsTD.insertBefore(copyButtonTop, topButtonsTD.childNodes[0]);
+                topButtonsTD.insertBefore(outerTopButtonDiv, topButtonsTD.childNodes[0]);
 
                 // Event listener for top button
                 copyButtonTop.addEventListener("click", function() {
-                    copyToClipboard(elementKey, keyType, elementType);
+                    copyToClipboard(elementKey, keyType, elementType, 'top');
                 });
             }
 
@@ -104,13 +114,23 @@ function init() {
                 copyButtonBottom.setAttribute('type', 'button');
                 copyButtonBottom.setAttribute('value', 'Copy');
 
+                // Create Inner Button Div
+                var innerButtonDiv = document.createElement('div');
+                innerButtonDiv.setAttribute('class', 'innerButtonDiv');
+                innerButtonDiv.append(copyButtonBottom);
+
+                // Create Outer Button Div
+                var outerBottomButtonDiv = document.createElement('div');
+                outerBottomButtonDiv.setAttribute('class', 'outerBottomButtonDiv');
+                outerBottomButtonDiv.append(innerButtonDiv);
+
                 // Add bottom button to page
                 var bottomButtonsTD = document.querySelector("[class*='pbButtonb']");
-                bottomButtonsTD.insertBefore(copyButtonBottom, bottomButtonsTD.childNodes[0]);
+                bottomButtonsTD.insertBefore(outerBottomButtonDiv, bottomButtonsTD.childNodes[0]);
 
                 // Event listener for bottom button
                 copyButtonBottom.addEventListener("click", function() {
-                    copyToClipboard(elementKey, keyType, elementType);
+                    copyToClipboard(elementKey, keyType, elementType, 'bottom');
                 });
             }
         }
@@ -129,14 +149,13 @@ function init() {
 /**
  * This method runs when the 'Copy' button is clicked and copy the code.
  */
-function copyToClipboard(elementKey, keyType, elementType) {
+function copyToClipboard(elementKey, keyType, elementType, buttonPos) {
     if (elementType == 'textarea') {
         var iframe = document.querySelector("[name*='codeeditor:buffer']");
         var tempInput = iframe.contentWindow.document.getElementById(elementKey);
 
         tempInput.select();
         iframe.contentWindow.document.execCommand("copy");
-        alert("Code Copied!");
     } else {
         var tempInput = document.createElement("textarea"); 
         if (keyType == 'id') {
@@ -150,6 +169,25 @@ function copyToClipboard(elementKey, keyType, elementType) {
         tempInput.select(); 
         document.execCommand("copy");
         tempInput.remove();
-        alert("Code Copied!");
+    }
+
+    var delayTime = 1000;
+
+    if (buttonPos == 'top') {
+        var outerTopButtonDiv = document.getElementsByClassName('outerTopButtonDiv');
+        if (outerTopButtonDiv != null) {
+            outerTopButtonDiv[0].classList.add('copied');
+            setTimeout(function() {
+                outerTopButtonDiv[0].classList.remove('copied');
+            }, delayTime);
+        }
+    } else if (buttonPos == 'bottom') {
+        var outerBottomButtonDiv = document.getElementsByClassName('outerBottomButtonDiv');
+        if (outerBottomButtonDiv != null) {
+            outerBottomButtonDiv[0].classList.add('copied');
+            setTimeout(function() {
+                outerBottomButtonDiv[0].classList.remove('copied');
+            }, delayTime);
+        }
     }
 }
