@@ -1,22 +1,51 @@
 <!DOCTYPE html>
-<html style="margin: 0px;">
+<html>
     <head>
+        <link rel="stylesheet" href="../static/css/style.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+        <script src="../static/js/functions.js"></script>
     </head>
-    <body style="margin: 0px; width: 348px;">
-        <img src="../img/logo_small.png" style="width: 250px; padding: 10px 10px;">
-        <div style="background-color: #d7f7e8; padding: 5px 15px;" >
-            <h4><u>Description:</u></h4>
-            <p>Easily copy the code by clicking the "Copy" button.</p>
-            <h4><u>Instructions:</u></h4>
-            <ol>
-                <li>Open any Apex Class, Apex Trigger, Visualforce Page, Visualforce Component and Formula Field.</li>
-                <li>Click on the "Copy" button which is present along with other Salesforce standard buttons.</li>
-                <li>An alert "Code Copied!" will be shown once code is copied to clipboard.</li>
-                <li>Use the copied code.</li>
-            </ol>
-            <h4>Created By: 
-                <a href="https://www.linkedin.com/in/hsrajawat" target="_blank" style="color: #000">Hemendra Singh Rajawat</a>
-            </h4>
+    <body class="popover">
+        <div class="image">
+            <img src="../static/img/logo_small.png">
         </div>
+        <div class="content">
+            <div class="description">
+                <h4>Description</h4>
+                <p>Easily copy the code by clicking the "Copy" button. A popover message will be shown after successful copy operation.</p>
+            </div>
+
+            <div class="options">
+                <h4>Options</h4>
+                <div class="editPageAvailable">
+                    <p>Available on Edit Page:
+                        <label class="switch">
+                            <input type="checkbox" id="editPageAvailable">
+                            <span class="slider round"></span>
+                        </label>
+                    </p>
+                </div>
+
+                <div class="buttonPosition">
+                    <p>Button Position:
+                        <label class="switch" id="buttonPositionLabel">
+                            <input type="checkbox" id="buttonPosition">
+                            <span class="slider round"></span>
+                        </label>
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact">
+                <h4>Contact</h4>
+                <p>
+                    <a href="https://www.linkedin.com/in/hsrajawat/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/hemendrarajawat" target="_blank"><i class="fab fa-github-square"></i></a>
+                </p>
+            </div>
+        </div>
+        
+        <script src="../static/js/popup.js"></script>
     </body>
 </html>
