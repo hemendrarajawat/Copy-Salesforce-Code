@@ -1,6 +1,10 @@
-init();
+chrome.storage.sync.get(null, function (data) {
+    var returnData = getData(data);
 
-function init() {
+    init(returnData);
+});
+
+function init(returnData) {
     var url = new URL(window.location.href);
     var pathName = url.pathname;
     var validPage = false;
@@ -8,6 +12,8 @@ function init() {
     var keyType = 'id';
     var buttonPos = 'both';
     var elementType = '';
+    var editPageAvailable = returnData.editPageAvailable;
+    var buttonPosition = returnData.buttonPosition;
 
     /*
      * Check if the current page is for 'Apex Class', 'Apex Trigger', 'Visualforce Page' 
@@ -48,7 +54,8 @@ function init() {
                 // Apex Class View Page
                 elementKey = document.querySelectorAll("[id*='codeBlockItem:codeTable:0']")[1].id;
                 validPage = true;
-            } else if (pathName.includes('/e') || pathName.startsWith('/setup/build/editApexClass.apexp')) {
+            } else if ((pathName.includes('/e') || pathName.startsWith('/setup/build/editApexClass.apexp')) 
+                && editPageAvailable) {
 
                 // Apex Class Edit Page
                 elementKey = 'textarea';
@@ -98,7 +105,12 @@ function init() {
 
                 // Add top button to page
                 var topButtonsTD = document.querySelector("[class*='pbButton']");
-                topButtonsTD.insertBefore(outerTopButtonDiv, topButtonsTD.childNodes[0]);
+
+                if (buttonPosition == 'first') {
+                    topButtonsTD.insertBefore(outerTopButtonDiv, topButtonsTD.childNodes[0]);
+                } else {
+                    topButtonsTD.insertBefore(outerTopButtonDiv, topButtonsTD.childNodes[topButtonsTD.childNodes.length]);
+                }
 
                 // Event listener for top button
                 copyButtonTop.addEventListener("click", function() {
@@ -126,7 +138,12 @@ function init() {
 
                 // Add bottom button to page
                 var bottomButtonsTD = document.querySelector("[class*='pbButtonb']");
-                bottomButtonsTD.insertBefore(outerBottomButtonDiv, bottomButtonsTD.childNodes[0]);
+
+                if (buttonPosition == 'first') {
+                    bottomButtonsTD.insertBefore(outerBottomButtonDiv, bottomButtonsTD.childNodes[0]);
+                } else {
+                    bottomButtonsTD.insertBefore(outerBottomButtonDiv, bottomButtonsTD.childNodes[bottomButtonsTD.childNodes.length]);
+                }
 
                 // Event listener for bottom button
                 copyButtonBottom.addEventListener("click", function() {
