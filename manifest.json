@@ -28,7 +28,7 @@
     "content_scripts": [{
         "js": ["static/js/functions.js", "static/js/contentscript.js"],
         "css": ["static/css/style.min.css"],
-        "matches": [ "https://*.salesforce.com/*","https://*.force.com/*"]
+        "matches": [ "https://*.salesforce.com/*", "https://*.force.com/*"]
     }],
 
     "update_url": "http://clients2.google.com/service/update2/crx?response=updatecheck&x=id%3Dnmbfpjnjhckcffgpcdahlebepedkoaib%26uc"
